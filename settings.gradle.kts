@@ -23,3 +23,4 @@ rootProject.name = "CursoKotlin"
 include(":app")
 include(":Lesson1")
 include(":EjercicioLesson1")
+include(":Lesson2")
