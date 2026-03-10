@@ -26,7 +26,7 @@ abstract class Fruta(
     val nivelDulzura: Int,
     val origen: Origen,
     val informacionNutricional: InformacionNutricional
-){
+): Comestible{
     fun tipoSabor(): String{
         return when(nombre.lowercase()){
             "manzana", "platano" -> "Dulce"
@@ -35,62 +35,69 @@ abstract class Fruta(
             else -> "Sabor no definido"
         }
     }
+
+    fun mostrarDetalles() {
+        println("Fruta: ${nombre.replaceFirstChar { it.uppercase() }}")
+        println("Color: $color")
+        println("Sabor: ${tipoSabor()}")
+        println("Origen: ${origen.pais}")
+        print("Forma de comer: "); formaDeComer()
+        print("Calorías: "); caloriasAportadas()
+    }
 }
 
 class Leon(edad: Int, peso: Double, habitat: Habitat, cuidador: Cuidador) :
-    Animal(
-        "León", edad, peso, habitat, cuidador
-    ){
-    override fun hacerSonido() {
-        println("Rugido")
-    }
+    Animal("León", edad, peso, habitat, cuidador) {
+
+    override fun hacerSonido() { println("Rugido") }
+
     override fun mostarInfo() {
-        println("Info del León: Nombre: $nombre, Hábitat: $habitat, Cuidador: $cuidador")
+        println("Animal: $nombre")
+        println("Edad: $edad")
+        println("Peso: $peso kg")
+        println("Hábitat: ${habitat.tipo}")
+        print("Sonido: "); hacerSonido()
+        println("Comestible: No")
     }
 }
 
 class Gallina(edad: Int, peso: Double, habitat: Habitat, cuidador: Cuidador) :
-        Animal(
-            "Gallina", edad, peso, habitat, cuidador
-        ), Comestible{
-    override fun hacerSonido() {
-        println("Cacareo")
-    }
+    Animal("Gallina", edad, peso, habitat, cuidador), Comestible {
+
+    override fun hacerSonido() { println("Cacareo") }
 
     override fun mostarInfo() {
-        println("Info de la Gallina: Nombre: $nombre, Peso: $peso kg")
+        println("Animal: $nombre")
+        println("Edad: $edad")
+        println("Peso: $peso kg")
+        println("Hábitat: ${habitat.tipo}")
+        print("Sonido: "); hacerSonido()
+        println("Comestible: Sí")
+        print("Forma de comer: "); formaDeComer()
     }
 
-    override fun formaDeComer(){
-        println("Se puede comeer asada, frita y también en caldo")
-    }
-
-    override fun caloriasAportadas(){
-        println("215 kcal por cada 100g")
-    }
+    override fun formaDeComer() { println("Cocida, asada o en caldo") }
+    override fun caloriasAportadas() { println("215") }
 }
 
 class Vaca(edad: Int, peso: Double, habitat: Habitat, cuidador: Cuidador) :
-        Animal(
-            "Vaca", edad, peso, habitat, cuidador
-        ), Comestible {
-    override fun hacerSonido() {
-        println("Mugido")
-    }
+    Animal("Vaca", edad, peso, habitat, cuidador), Comestible {
+
+    override fun hacerSonido() { println("Mugido") }
 
     override fun mostarInfo() {
-        println("Info de la Vaca: Nombre: $nombre, Cuidador: $cuidador")
+        println("Animal: $nombre")
+        println("Edad: $edad")
+        println("Peso: $peso kg")
+        println("Hábitat: ${habitat.tipo}")
+        print("Sonido: "); hacerSonido()
+        println("Comestible: Sí")
+        print("Forma de comer: "); formaDeComer()
     }
 
-    override fun formaDeComer(){
-        println("Se come como corte de carne")
-    }
-
-    override fun caloriasAportadas(){
-        println("250 kcal por cada 100g")
-    }
+    override fun formaDeComer() { println("Corte de carne") }
+    override fun caloriasAportadas() { println("250") }
 }
-
 class Manzana(color: String, peso: Double, nivelDulzura: Int, origen: Origen, informacionNutricional: InformacionNutricional):
     Fruta(
         "manzana", color, peso, nivelDulzura, origen, informacionNutricional
@@ -159,21 +166,21 @@ data class InformacionNutricional(
 )
 
 fun main() {
-    // Ejemplo de creación de objetos con las nuevas Data Classes
-    val habitatLeon = Habitat("Sabana", 30.0, "África")
-    val cuidadorLeon = Cuidador("Carlos", 10, "Felinos")
-    val simba = Leon(5, 190.0, habitatLeon, cuidadorLeon)
+    val leon = Leon(5, 190.0, Habitat("Sabana", 30.0, "África"), Cuidador("Calixto", 8, "Felinos"))
+    val gallina = Gallina(2, 3.0, Habitat("Granja", 20.0, "Sonora"), Cuidador("Paco", 15, "Aves"))
+    val vaca = Vaca(4, 650.0, Habitat("Campo", 22.0, "Pampa"), Cuidador("Beto", 20, "Ganado"))
 
-    val infoManzana = InformacionNutricional(52.0, 10.0, 2.4, 0.3)
-    val origenManzana = Origen("México", "Chihuahua", "Huerta Del Sol")
-    val manzanaRoja = Manzana("Roja", 150.0, 8, origenManzana, infoManzana)
+    val manzana = Manzana("Roja", 150.0, 8, Origen("México", "Chihuahua", "Huerta Sol"), InformacionNutricional(52.0, 10.0, 2.4, 0.3))
+    val naranja = Naranja("Naranja", 200.0, 6, Origen("España", "Valencia", "Cítricos Real"), InformacionNutricional(47.0, 9.0, 2.4, 0.9))
+    val platano = Platano("Amarillo", 120.0, 9, Origen("Ecuador", "Guayas", "Bananera Sur"), InformacionNutricional(89.0, 12.0, 2.6, 1.1))
 
-    println("--- PRUEBA ANIMAL ---")
-    simba.mostarInfo()
-    simba.hacerSonido()
+    println("--- LISTADO DE ANIMALES ---")
+    leon.mostarInfo(); println()
+    gallina.mostarInfo(); println()
+    vaca.mostarInfo(); println()
 
-    println("\n--- PRUEBA FRUTA ---")
-    println("Fruta: ${manzanaRoja.nombre}, Sabor: ${manzanaRoja.tipoSabor()}")
-    manzanaRoja.formaDeComer()
-    manzanaRoja.caloriasAportadas()
+    println("--- LISTADO DE FRUTAS ---")
+    manzana.mostrarDetalles(); println()
+    naranja.mostrarDetalles(); println()
+    platano.mostrarDetalles()
 }
